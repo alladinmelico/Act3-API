@@ -13,7 +13,7 @@
 		/>
 	</head>
 	<body>
-		<main id="app" class="container mx-auto w-50 p-5">
+		<main id="app" class="container mx-auto w-50">
 			<img
 				src="./azure-logo.gif"
 				alt="azure-logo"
@@ -23,17 +23,14 @@
 			<h3 class="text-primary text-center">
 				Text Analytics API - Azure Cognitive Services
 			</h3>
-			<h4 class="text-secondary mt-5">
-				What can you say about this product?
-			</h4>
-			<div class="card mb-3 mt-3 p-3 shadow">
-				<div class="row g-0">
-					<div class="col-md-4">
+			<div class="row mt-3 gy-5">
+				<div class="col border-end">
+					<h5 class="text-secondary text-center">
+						What can you say about this product?
+					</h5>
+					<div class="card mx-auto" style="width: 18rem">
 						<img src="shoe.png" alt="shoe" class="img-fluid" />
-					</div>
-					<div class="col-md-8">
 						<div class="card-body">
-							<h5 class="card-title">The Best Shoes</h5>
 							<p class="card-text">
 								Lorem ipsum dolor, sit amet consectetur
 								adipisicing elit. Deleniti architecto similique
@@ -42,39 +39,47 @@
 								voluptatum temporibus error aperiam, enim veniam
 								voluptas?
 							</p>
-							<p class="card-text">
-								<small class="text-muted"
-									>Last updated 3 mins ago</small
-								>
-							</p>
 						</div>
 					</div>
 				</div>
-			</div>
-			<form>
-				<div class="input-group mt-3 p-3">
-					<input
-						type="text"
-						class="form-control"
-						id="comment"
-						name="comment"
-						placeholder="Comment"
-					/>
-					<button type="submit" class="btn btn-primary">
-						Submit
-					</button>
+				<div class="col">
+					<div class="container-fluid bg-light rounded p-3 mt-3 mb-4">
+						<label for="sentimentContainer">Sentiment</label>
+						<div
+							class="progress mb-3"
+							id="sentimentContainer"
+						></div>
+
+						<label for="languageContainer">Language</label>
+						<div class="progress mb-3" id="languageContainer"></div>
+
+						<label for="phrasesContainer">Key Phrases</label>
+						<div class="mb-3" id="phrasesContainer"></div>
+
+						<label for="entityContainer">Named Entity</label>
+						<div class="mb-3" id="entityContainer"></div>
+					</div>
+
+					<form>
+						<div class="form-floating mt-2">
+							<textarea
+								class="form-control"
+								placeholder="Leave a comment here"
+								id="comment"
+								name="comment"
+								style="height: 200px"
+							></textarea>
+							<label for="comment">Comments</label>
+						</div>
+						<button
+							type="submit"
+							class="btn btn-primary mt-2 me-auto"
+							id="submit"
+						>
+							Comment
+						</button>
+					</form>
 				</div>
-			</form>
-
-			<div class="container-fluid bg-light rounded p-3">
-				<label for="sentimentContainer">Sentiment</label>
-				<div class="progress mb-3" id="sentimentContainer"></div>
-
-				<label for="languageContainer">Language</label>
-				<div class="progress mb-3" id="languageContainer"></div>
-
-				<label for="phrasesContainer">Key Phrases</label>
-				<div class="progress mb-3" id="phrasesContainer"></div>
 			</div>
 		</main>
 		<!-- JavaScript Bundle with Popper -->
@@ -88,6 +93,6 @@
 			integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
 			crossorigin="anonymous"
 		></script>
-		<script src="app.js"></script>
+		<script src="app.js" defer></script>
 	</body>
 </html>

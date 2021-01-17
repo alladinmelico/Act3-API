@@ -2,9 +2,16 @@ const input = $('#comment')
 
 $('form').on('submit', function (e) {
 	e.preventDefault()
-	clear()
-	language()
-	sentiment()
+	if (input.val() !== '') {
+		$('#submit')
+			.prepend(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+		`)
+		clear()
+		language()
+		sentiment()
+		phrases()
+		entity()
+	}
 })
 
 const language = async () => {
@@ -17,7 +24,7 @@ const language = async () => {
 					documents: [{ text: input.val(), id: 1 }],
 				}),
 				headers: {
-					'Content-type': 'Application/json; charset=UTF-8',
+					'Content-type': 'application/json; charset=UTF-8',
 					'Ocp-Apim-Subscription-Key':
 						'46a7958b0b424bc0aeeae8f9592d51ab',
 				},
@@ -39,6 +46,8 @@ const language = async () => {
                 </div>
         `)
 		})
+
+		await $('#loading span').remove()
 	} catch (error) {
 		console.log(error)
 	}
@@ -54,7 +63,7 @@ const sentiment = async () => {
 					documents: [{ text: input.val(), id: 1 }],
 				}),
 				headers: {
-					'Content-type': 'Application/json; charset=UTF-8',
+					'Content-type': 'application/json; charset=UTF-8',
 					'Ocp-Apim-Subscription-Key':
 						'46a7958b0b424bc0aeeae8f9592d51ab',
 				},
@@ -62,6 +71,8 @@ const sentiment = async () => {
 		)
 		const data = await response.json()
 		await fetchSentiment(data.documents[0])
+
+		await $('#submit span').remove()
 	} catch (error) {
 		console.log(error)
 	}
@@ -70,21 +81,49 @@ const sentiment = async () => {
 const phrases = async () => {
 	try {
 		const response = await fetch(
-			'https://svnhs-is.cognitiveservices.azure.com/text/analytics/v2.1/sentiment',
+			'https://svnhs-is.cognitiveservices.azure.com/text/analytics/v2.1/keyPhrases',
 			{
 				method: 'POST',
 				body: JSON.stringify({
 					documents: [{ text: input.val(), id: 1 }],
 				}),
 				headers: {
-					'Content-type': 'Application/json; charset=UTF-8',
+					'Content-type': 'application/json; charset=UTF-8',
 					'Ocp-Apim-Subscription-Key':
 						'46a7958b0b424bc0aeeae8f9592d51ab',
 				},
 			}
 		)
 		const data = await response.json()
-		await fetchSentiment(data.documents[0])
+		await fetchPhrases(data.documents[0].keyPhrases)
+
+		await $('#submit span').remove()
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+const entity = async () => {
+	try {
+		const response = await fetch(
+			'https://svnhs-is.cognitiveservices.azure.com/text/analytics/v2.1/entities',
+			{
+				method: 'POST',
+				body: JSON.stringify({
+					documents: [{ text: input.val(), id: 1 }],
+				}),
+				headers: {
+					'Content-type': 'application/json; charset=UTF-8',
+					'Ocp-Apim-Subscription-Key':
+						'46a7958b0b424bc0aeeae8f9592d51ab',
+				},
+			}
+		)
+		const data = await response.json()
+		await console.log(data)
+		await fetchEntities(data.documents[0].entities)
+
+		await $('#submit span').remove()
 	} catch (error) {
 		console.log(error)
 	}
@@ -121,8 +160,27 @@ function fetchSentiment(element) {
     `)
 }
 
+function fetchEntities(entities) {
+	entities.forEach((element) => {
+		element.matches.forEach((match) => {
+			$('#entityContainer').append(
+				`<a href="${element.wikipediaUrl}" class="m-2" target="_blank">${match.text}</a>`
+			)
+		})
+	})
+}
+
+function fetchPhrases(items) {
+	items.forEach((element) => {
+		$('#phrasesContainer').append(
+			`<span class="badge bg-primary m-2">${element}</span>`
+		)
+	})
+}
+
 function clear() {
 	$('#sentimentContainer').html('')
 	$('#languageContainer').html('')
 	$('#phrasesContainer').html('')
+	$('#entityContainer').html('')
 }
